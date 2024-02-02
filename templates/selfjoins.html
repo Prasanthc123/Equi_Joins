@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <center>
+        <h1>self joins</h1>
+        <table border="2px">
+            <tr>
+                <th>ename</th>
+                <th>mgr</th>
+                <th>sal</th>
+            </tr>
+        {% for eo in empmgrobject %}
+        <tr>
+            <td>{{eo.ename}}</td>
+            <td>{{eo.mgr.ename}}</td>
+            <td>{{eo.sal}}</td>
+        </tr>
+        {% endfor %}
+        </table>
+    </center>
+</body>
+</html>
