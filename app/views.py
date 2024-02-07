@@ -8,13 +8,14 @@ def equijoins(request):
     EMPOBJECTS=Emp.objects.select_related('deptno').filter(deptno='10')
     EMPOBJECTS=Emp.objects.select_related('deptno').filter(hiredate__year=2024)
     EMPOBJECTS=Emp.objects.select_related('deptno').filter(hiredate__month=1,hiredate__day=21)
-
     EMPOBJECTS=Emp.objects.select_related('deptno').filter(ename='SMITH' ,deptno__dname='RESEARCH')
+
     EMPOBJECTS=Emp.objects.select_related('deptno').filter(ename__startswith='S')
     EMPOBJECTS=Emp.objects.select_related('deptno').filter(comm__isnull=False)
     EMPOBJECTS=Emp.objects.select_related('deptno').filter(comm__isnull=True)
     EMPOBJECTS=Emp.objects.select_related('deptno').all()[:4]
     EMPOBJECTS=Emp.objects.select_related('depto').filter(hiredate__year=2024)
+
     EMPOBJECTS=Emp.objects.select_related('deptno').filter(hiredate__month=1,hiredate__day=23)
     EMPOBJECTS=Emp.objects.select_related('deptno').filter(sal__lte=1000)
     EMPOBJECTS=Emp.objects.select_related('deptno').filter(comm__isnull=False)
@@ -30,11 +31,13 @@ def selfjoins(request):
     empmgrobject=Emp.objects.select_related('mgr').filter(mgr__ename='KING')
     empmgrobject=Emp.objects.select_related('mgr').filter(ename='KING')
     empmgrobject=Emp.objects.select_related('mgr').filter(mgr__ename='SCOTT')
+
     empmgrobject=Emp.objects.select_related('mgr').filter(mgr__ename='KING',sal__gte=2500)
     empmgrobject=Emp.objects.select_related('mgr').filter(mgr__isnull=False)
     empmgrobject=Emp.objects.select_related('mgr').filter(mgr__isnull=True)
     empmgrobject=Emp.objects.select_related('mgr').filter(mgr__ename__startswith='k')
     empmgrobject=Emp.objects.select_related('mgr').filter(hiredate__year=2024)
+    
     empmgrobject=Emp.objects.select_related('mgr').filter(hiredate__month=1,hiredate__day=23)
     empmgrobject=Emp.objects.select_related('mgr').filter(sal__lte=1000)
     empmgrobject=Emp.objects.select_related('mgr').filter(comm__isnull=False)
@@ -91,3 +94,18 @@ def emp_mgr_dept(request):
 
     d={'emd':emd}
     return render(request,'emp_mgr_dept.html',d)
+
+def emp_salgrade(request):
+    EO=Emp.objects.all()
+    SO=Salgrade.objects.all()
+
+    SO=Salgrade.objects.filter(grade=3)
+    EO=Emp.objects.filter(sal__range=(SO[0].losal,SO[0].hisal))
+
+    SO=Salgrade.objects.filter(grade__in=(3,4))
+    EO=Emp.objects.none()
+    for sgo in SO:
+        EO=EO|Emp.objects.filter(sal__range=(sgo.losal,sgo.hisal))
+
+    d={'EO':EO,'SO':SO}    
+    return render(request,'emp_salgrade.html',d)

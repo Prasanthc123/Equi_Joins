@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <center>
+        <table border="2px">
+            <tr>
+                <th>ename</th>
+                <th>empno</th>
+                <th>sal</th>
+                <th>grade</th>
+
+            </tr>
+            {% for eo in EO %}
+            <tr>
+                <td>{{eo.ename}}</td>
+                <td>{{eo.empno}}</td>
+                <td>{{eo.sal}}</td>
+
+
+                {% for so in SO %}
+                    {% if eo.sal >= so.losal and eo.sal <= so.hisal %}
+                        <td>{{so.grade}}</td>
+                    {% endif %}
+                {% endfor %}
+
+            </tr>
+            {% endfor %}
+        </table>
+    </center>
+</body>
+</html>
